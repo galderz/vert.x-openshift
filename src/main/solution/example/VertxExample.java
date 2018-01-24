@@ -1,10 +1,15 @@
 package example;
 
-import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
-import io.vertx.ext.web.Router;
+import io.vertx.reactivex.core.AbstractVerticle;
+import io.vertx.reactivex.ext.web.Router;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class VertxExample extends AbstractVerticle {
+
+   private static final Logger log = Logger.getLogger(VertxExample.class.getName());
 
    @Override
    public void start(Future<Void> future) {
@@ -15,10 +20,17 @@ public class VertxExample extends AbstractVerticle {
 
       vertx.createHttpServer()
          .requestHandler(router::accept)
-         .listen(8080, result -> {
-            System.out.println("Http server started");
-            future.complete();
-         });
+         .rxListen(8080)
+         .subscribe(
+            server -> {
+               log.info("HTTP server started");
+               future.complete();
+            },
+            failure -> {
+               log.log(Level.SEVERE, "HTTP server failed to start", failure);
+               future.fail(failure);
+            }
+         );
    }
 
 }
