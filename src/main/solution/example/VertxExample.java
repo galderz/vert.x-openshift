@@ -26,10 +26,7 @@ public class VertxExample extends AbstractVerticle {
                log.info("HTTP server started");
                future.complete();
             },
-            failure -> {
-               log.log(Level.SEVERE, "HTTP server failed to start", failure);
-               future.fail(failure);
-            }
+            future::fail
          );
    }
 
