@@ -28,6 +28,23 @@ public class VertxExample extends AbstractVerticle {
             },
             future::fail
          );
+
+//         .listen(8080,
+//            result -> {
+//               if (result.succeeded()) {
+//                  log.info("HTTP server started");
+//                  future.complete();
+//               } else {
+//                  future.fail(result.cause());
+//               }
+//            }
+//         );
+
+   }
+
+   public static void main(final String... args) {
+      Vertx vertx = Vertx.vertx();
+      vertx.deployVerticle(VertxExample.class.getName(), new DeploymentOptions());
    }
 
 }
